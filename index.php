@@ -1,14 +1,51 @@
 <?php
-include('connection.php');
-include('model.php');
+
+ob_start();
+
+include('class/model.php');
+$dat = new Dados();
+
+if(isset($_REQUEST["autenticar"]) && $_REQUEST["autenticar"] == true)
+{
+    $hashDaSenha = md5($_POST["senha"]);
+    $cpf = $_POST['cpf'];
+    $validar = $dat->loginUsuario($conn,$cpf,$hashDaSenha);
+  
+    
+    if($validar != false)
+    {
+        if(count($validar))
+        {
+            session_start();
+            $_SESSION["usuario"] = $validar['nome'];
+            // echo $_SESSION['usuario'];
+            // exit;
+            header("location: listaMaterial.php");
+        }
+        else
+        {
+            echo "Dados inválidos.";
+        }
+    }
+    else
+    {
+        echo "Falha no acesso.";
+    }
+    
+    
+    
+    
+}
+//Header
+// include('includes/header.php');
 ?>
 <!doctype html>
 <html lang="pt-br">
 
 <head>
-    <title>LOGIN</title>
+    <title>Title</title>
     <!-- Required meta tags -->
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
@@ -16,27 +53,27 @@ include('model.php');
 </head>
 
 <body>
-
-    <?php
-    $dados = new Dados;
-
-    $values = $dados->listarProdutos($conn);
-    // print_r($values);
-    // echo $values[0]['id_produto'];
-    ?>
-
     <div class="container">
-        <div class="row">
-            <div class="col-md-12 mt-5 bg-dark text-white p-3 text-center rounded">
-                <?php
-                foreach ($values as $val) {
-                    echo 'ID:' . $val['id_produto'] . '<br>';
-                    echo 'Nome produto:' . $val['nome'] . '<br>';
-                    echo 'Descrição:' . $val['descricao'] . '<br>';
-                    echo 'Quantidade:' . $val['qtd_produto'];
-                }
-                ?>
-            </div>
+        <div class="login mt-5">
+            <form action="?autenticar=true" method="post">
+                <div class="form-row align-items-center">
+                    <!-- <div class="col-md-4">dsadsa</div> -->
+                    <div class="col-md-4 mx-auto">
+                        <label for="idCpf">CPF:</label>
+                        <input type="text" name="cpf" id="idCpf" class="form-control" placeholder="" aria-describedby="helpId">
+                        <!-- <small id="helpId" class="text-muted">Help text</small> -->
+                    </div>
+                </div>
+                <div class="form-row align-items-center">
+                    <!-- <div class="col-md-4">dsadsa</div> -->
+                    <div class="col-md-4 mx-auto">
+                        <label for="idSenha">Senha:</label>
+                        <input type="password" name="senha" id="idSenha" class="form-control" placeholder="" aria-describedby="helpId">
+                        <!-- <small id="helpId" class="text-muted">Help text</small> -->
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-primary mx-auto" value="Autenticar">
+            </form>
         </div>
     </div>
     <!-- Optional JavaScript -->
@@ -47,3 +84,9 @@ include('model.php');
 </body>
 
 </html>
+<?php
+
+//footer
+include('includes/footer.php');
+ob_flush();
+?>
