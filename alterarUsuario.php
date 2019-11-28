@@ -1,7 +1,6 @@
-<?php 
+ <?php
 $erro = null;
 $valido = false;
-
 //Importar classes e conexao com o banco
 include('class/connection.php');
 include('class/model.php');
@@ -34,7 +33,6 @@ if(isset($_REQUEST["validar"]) && $_REQUEST["validar"] == true){
         exit;
     // }
 }
-
 if(isset($_GET['id']) && !empty($_GET['id'])){
     $id = $_GET['id'];
     $dadMat = $dat->pesquisaUsuario($conn,$id);
@@ -52,7 +50,6 @@ if(isset($_GET['id']) && !empty($_GET['id'])){
     }
 }
 // $id_mat = $_POST['id'];
-
 ?>
 <div class="container mt-3">
 <div class="row">
@@ -64,7 +61,7 @@ if(isset($_GET['id']) && !empty($_GET['id'])){
             <label for="cpf">CPF</label>
             <input type="text" 
             <?php if(isset($_POST["id_cpf"])) { echo "value='" . $_POST["id_cpf"] . "'"; } ?>
-            class="form-control" id="idcpf" name="cpf" placeholder="">
+            class="form-control" id="idcpf" name="cpf" placeholder="" readonly>
         </div>
         <div class="col-md-8">
         <label for="nomeUsuario">Nome</label>
